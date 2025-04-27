@@ -17,7 +17,9 @@ const SHEETBEST_URL = process.env.SHEETBEST_URL;
 const FoundationSchema = require('./src/models/Foundation');
 const path = require('path');
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://msuiitlostandfoundsid.onrender.com' // Replace with your actual frontend URL
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'build')));
 
