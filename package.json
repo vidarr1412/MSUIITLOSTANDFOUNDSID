@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "main": "main.js",
+  "main": "server.js",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -47,10 +47,13 @@
     "web-vitals": "^2.1.4"
   },
  "scripts": {
-  "build": "react-scripts build", // Builds the React app for production
-  "start": "npm run server && npm run build && node server.js", // Build React and start server
-  "server": "node server.js", // Starts the backend server
-  "react-start": "react-scripts start"
+  "react-start": "set BROWSER=none && react-scripts start ",
+    "electron-start": "wait-on http://localhost:3000 ",
+    "start": "node server.js",
+    "build": "npm install  && npm run build ",
+    "test": "react-scripts test",
+    "package": "electron-packager . MyApp --platform=win32 --arch=x64 --out=dist --overwrite --ignore=^/dist$",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
