@@ -46,15 +46,11 @@
     "recharts": "^2.15.1",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "server": "node server.js",
-    "react-start": "set BROWSER=none && react-scripts start ",
-    "electron-start": "wait-on http://localhost:3000 ",
- "start": "npm run server && npm run react-start",
-    "build": "npm install",
-    "test": "react-scripts test",
-    "package": "electron-packager . MyApp --platform=win32 --arch=x64 --out=dist --overwrite --ignore=^/dist$",
-    "eject": "react-scripts eject"
+ "scripts": {
+  "build": "react-scripts build", // Builds the React app for production
+  "start": "npm run server && npm run build && node server.js", // Build React and start server
+  "server": "node server.js", // Starts the backend server
+  "react-start": "react-scripts start"
   },
   "eslintConfig": {
     "extends": [
