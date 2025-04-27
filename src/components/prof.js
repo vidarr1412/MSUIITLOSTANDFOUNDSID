@@ -35,7 +35,7 @@ function Profile() {
     console.log("Fetching user data for ID:", userId);  // Log the userId
 
     try {
-      const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/profile/${userId}`, {
+      const response = await fetch(`/profile/${userId}`, {
         method: 'GET',  // Define GET method explicitly
         headers: {
           "Content-Type": "application/json",  // Specify the content type as JSON
