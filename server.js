@@ -121,6 +121,7 @@ app.get("/profile/:id", async (req, res) => {
   }
 });
 
+
 // Update user profile (first name, last name, email)
 app.put("/update-profile/:userId", async (req, res) => {
   const { userId } = req.params;
