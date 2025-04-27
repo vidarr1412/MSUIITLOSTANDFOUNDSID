@@ -1,4 +1,4 @@
-require("dotenv").config(); // Load environment variables
+
 const express = require("express");
 const mongoose = require("mongoose"); 
 const cors = require("cors");
@@ -10,7 +10,7 @@ const Complaint = require('./src/models/Complaint'); // Import the Complaint mod
 const RetrievalRequestSchema =require('./src/models/RetrievalRequest');
 const axios = require("axios"); // Ensure axios is installed
 const app = express();
-const PORT =  5000;
+const PORT = process.env.PORT || 5000; // Render provides a dynamic port via process.env.PORT
 const MONGO_URI = process.env.MONGO_URI;
 const SECRET_KEY = process.env.SECRET_KEY;
 const SHEETBEST_URL = process.env.SHEETBEST_URL;
