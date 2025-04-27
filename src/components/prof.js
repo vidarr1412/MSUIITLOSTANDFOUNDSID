@@ -29,30 +29,31 @@ function Profile() {
       console.error("Invalid token:", error);
     }
   }
- useEffect(() => {
+useEffect(() => {
   const fetchUserData = async () => {
     if (!userId) return;
 
     try {
-      // Make the request to the profile endpoint
+      console.log('Fetching user data for ID:', userId);  // Log before the fetch call
+
       const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/profile/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Cache-Control': 'no-cache',  // This makes sure to bypass cache
         },
       });
 
-      // Check if response is OK
+      console.log('Response status:', response.status);  // Log the response status
+      console.log('Response headers:', response.headers);  // Log the response headers
+
       if (!response.ok) {
         throw new Error(`Error fetching user data: ${response.statusText}`);
       }
 
-      // Ensure the response is in JSON format
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
+        console.log('Received user data:', data);  // Log the actual response data
 
-        // Handle data correctly
         setUser({
           firstName: data.firstName || "",
           lastName: data.lastName || "",
