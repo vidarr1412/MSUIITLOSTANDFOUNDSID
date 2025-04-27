@@ -34,7 +34,7 @@ function Profile() {
     const fetchUserData = async () => {
       if (!userId) return;
       try {
-        const response = await fetch(`${API_URL}/profile/${userId}`, {
+        const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/profile/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
@@ -163,7 +163,7 @@ function Profile() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/update-profile/${userId}`, {
+      const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/update-profile/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
