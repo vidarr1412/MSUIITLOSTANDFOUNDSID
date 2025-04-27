@@ -34,7 +34,7 @@ app.get('*', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 // });
 mongoose
-.connect(MONGO_URI)
+.connect('mongodb+srv://quasi452:1412@cluster0.tv4qs.mongodb.net/firi?retryWrites=true&w=majority&appName=Cluster0')
 .then(() => {
   console.log('Connected to MongoDB!');
 })
