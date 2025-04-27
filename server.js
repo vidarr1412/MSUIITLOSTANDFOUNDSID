@@ -18,7 +18,12 @@ const FoundationSchema = require('./src/models/Foundation');
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'build')));
 
+// All other requests will return the index.html from the React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 mongoose
 .connect(MONGO_URI)
 .then(() => {
