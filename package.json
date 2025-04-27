@@ -8,6 +8,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@fvilers/disable-react-devtools": "^1.3.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -46,17 +47,16 @@
     "recharts": "^2.15.1",
     "web-vitals": "^2.1.4"
   },
-"scripts": {
-  "start": "node server.js",
-  "build": "react-scripts build",
-  "dev": "nodemon server.js",
-  "test": "react-scripts test",
-  "react-start": "set BROWSER=none && react-scripts start",
-  "electron-start": "wait-on http://localhost:3000",
-  "package": "electron-packager . MyApp --platform=win32 --arch=x64 --out=dist --overwrite --ignore=^/dist$",
-  "eject": "react-scripts eject"
-}
-,
+  "scripts": {
+    "start": "node server.js",
+    "build": "react-scripts build",
+    "dev": "nodemon server.js",
+    "test": "react-scripts test",
+    "react-start": "set BROWSER=none && react-scripts start",
+    "electron-start": "wait-on http://localhost:3000",
+    "package": "electron-packager . MyApp --platform=win32 --arch=x64 --out=dist --overwrite --ignore=^/dist$",
+    "eject": "react-scripts eject"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -76,7 +76,6 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "^5.0.0",
     "concurrently": "^9.1.2",
     "electron": "^35.1.5",
     "electron-packager": "^17.1.2",
