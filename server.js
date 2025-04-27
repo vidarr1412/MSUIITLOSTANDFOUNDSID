@@ -114,12 +114,19 @@ app.get("/profile/:id", async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    res.json(user);
+
+    // Add headers to avoid caching
+    res.setHeader('Cache-Control', 'no-store');  // Prevents any caching
+    res.setHeader('Pragma', 'no-cache');  // Another cache-control header
+    res.setHeader('Expires', '0');  // Ensures no caching in the future
+
+    res.json(user);  // Return user data as JSON
   } catch (error) {
     console.error("Error fetching profile:", error);
     res.status(500).json({ error: "Error fetching profile" });
   }
 });
+
 
 
 // Update user profile (first name, last name, email)
