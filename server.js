@@ -108,20 +108,13 @@ app.post("/signup", async (req, res) => {
     res.status(500).json({ error: "Error registering user" });
   }
 });
-app.get("/profile/:id", async (req, res) => {
+app.get("/api/profile/:id", async (req, res) => {
   try {
-    // Set headers to prevent caching
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-    res.setHeader('Content-Type', 'application/json');  // Ensuring the response is recognized as JSON
-
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    
-    res.json(user); // Sending JSON response
+    res.json(user);
   } catch (error) {
     console.error("Error fetching profile:", error);
     res.status(500).json({ error: "Error fetching profile" });
