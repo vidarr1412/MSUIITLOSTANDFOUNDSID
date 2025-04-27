@@ -32,43 +32,34 @@ function Profile() {
 useEffect(() => {
   const fetchUserData = async () => {
     if (!userId) return;
+    
+    console.log("Fetching user data for ID:", userId); // Log the userId
 
     try {
-      console.log('Fetching user data for ID:', userId);  // Log before the fetch call
-
       const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/profile/${userId}`, {
-        headers: {
+        headers: { 
           Authorization: `Bearer ${token}`,
         },
+        cache: 'no-store',  // Add this line to disable caching
       });
 
-      console.log('Response status:', response.status);  // Log the response status
-      console.log('Response headers:', response.headers);  // Log the response headers
-
       if (!response.ok) {
-        throw new Error(`Error fetching user data: ${response.statusText}`);
+        console.error("Response not OK:", response);
+        return;
       }
 
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        console.log('Received user data:', data);  // Log the actual response data
-
-        setUser({
-          firstName: data.firstName || "",
-          lastName: data.lastName || "",
-          email: data.email || "",
-          image_Url: data.image_Url || "prof.jpg",
-          contactNumber: data.contactNumber || "",
-          college: data.college || "",
-          year_lvl: data.year_lvl || "",
-        });
-      } else {
-        throw new Error("Expected JSON but got something else.");
-      }
+      const data = await response.json();
+      setUser({
+        firstName: data.firstName || "",
+        lastName: data.lastName || "",
+        email: data.email || "",
+        image_Url: data.image_Url || "prof.jpg",
+        contactNumber: data.contactNumber || "",
+        college: data.college || "",
+        year_lvl: data.year_lvl || "",
+      });
     } catch (error) {
       console.error("Error fetching user data:", error);
-      alert(`Error: ${error.message}`);  // Optionally alert the user
     }
   };
 
