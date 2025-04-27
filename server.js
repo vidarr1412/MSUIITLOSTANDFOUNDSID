@@ -15,14 +15,17 @@ const MONGO_URI = process.env.MONGO_URI;
 const SECRET_KEY = process.env.SECRET_KEY;
 const SHEETBEST_URL = process.env.SHEETBEST_URL;
 const FoundationSchema = require('./src/models/Foundation');
+const path = require('path');
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'build')));
+const __dirname = path.resolve();
 
-// All other requests will return the index.html from the React app
+app.use(express.static(path.join(__dirname, '/dist')));
+
+// For any route, serve index.html from root's 'dist' folder
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 mongoose
 .connect(MONGO_URI)
