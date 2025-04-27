@@ -28,49 +28,44 @@ function Profile() {
     } catch (error) {
       console.error("Invalid token:", error);
     }
-  }useEffect(() => {
-  const fetchUserData = async () => {
-    if (!userId) return;
-
-    console.log("Fetching user data for ID:", userId);  // Log the userId
-
-    try {
-      const response = await fetch(`/profile/${userId}`, {
-        method: 'GET',  // Define GET method explicitly
-        headers: {
-          "Content-Type": "application/json",  // Specify the content type as JSON
-          "Authorization": `Bearer ${token}`,  // Add your authorization header if needed
-        },
-        cache: 'no-store',  // Disable caching
-      });
-
-      if (!response.ok) {
-        console.error("Response not OK:", response);
-        return;
+  }
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!userId) return;
+      try {
+        const response = await fetch(`http://localhost:3000/profile/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        // Check if the response is not ok (status is not 200)
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user data: ${response.statusText}`);
+        }
+  
+        // Check if the response is JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+          setUser({
+            firstName: data.firstName || "",
+            lastName: data.lastName || "",
+            email: data.email || "",
+            image_Url: data.image_Url || "prof.jpg",
+            contactNumber: data.contactNumber || "",
+            college: data.college || "",
+            year_lvl: data.year_lvl || "",
+          });
+        } else {
+          throw new Error('Expected JSON but got something else');
+        }
+  
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        alert(`Error: ${error.message}`);
       }
-
-      const data = await response.json();
-      setUser({
-        firstName: data.firstName || "",
-        lastName: data.lastName || "",
-        email: data.email || "",
-        image_Url: data.image_Url || "prof.jpg",
-        contactNumber: data.contactNumber || "",
-        college: data.college || "",
-        year_lvl: data.year_lvl || "",
-      });
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
-  fetchUserData();
-}, [userId, token]);
-
-
-  fetchUserData();
-}, [userId, token]);
-
+    };
+    fetchUserData();
+  }, [userId, token]);
   
   const handleImageChange = (event) => {
     const file = event.target.files[0];
