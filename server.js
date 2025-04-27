@@ -109,24 +109,25 @@ app.post("/signup", async (req, res) => {
   }
 });
 app.get("/profile/:id", async (req, res) => {
-  console.log(`Received request for profile with ID: ${req.params.id}`);
-  
-  // Set headers to prevent caching
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-
   try {
+    // Set headers to prevent caching
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('Content-Type', 'application/json');  // Ensuring the response is recognized as JSON
+
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    res.json(user);
+    
+    res.json(user); // Sending JSON response
   } catch (error) {
     console.error("Error fetching profile:", error);
     res.status(500).json({ error: "Error fetching profile" });
   }
 });
+
 
 
 
