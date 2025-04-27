@@ -29,7 +29,6 @@ function Profile() {
       console.error("Invalid token:", error);
     }
   }
-
   useEffect(() => {
     const fetchUserData = async () => {
       if (!userId) return;
@@ -37,23 +36,37 @@ function Profile() {
         const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/profile/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const data = await response.json();
-        setUser({
-          firstName: data.firstName || "",
-          lastName: data.lastName || "",
-          email: data.email || "",
-          image_Url: data.image_Url || "prof.jpg",
-          contactNumber:data.contactNumber||"",
-          college:data.college||"",
-          year_lvl:data.year_lvl||"",
-        });
+  
+        // Check if the response is not ok (status is not 200)
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user data: ${response.statusText}`);
+        }
+  
+        // Check if the response is JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+          setUser({
+            firstName: data.firstName || "",
+            lastName: data.lastName || "",
+            email: data.email || "",
+            image_Url: data.image_Url || "prof.jpg",
+            contactNumber: data.contactNumber || "",
+            college: data.college || "",
+            year_lvl: data.year_lvl || "",
+          });
+        } else {
+          throw new Error('Expected JSON but got something else');
+        }
+  
       } catch (error) {
         console.error("Error fetching user data:", error);
+        alert(`Error: ${error.message}`);
       }
     };
     fetchUserData();
   }, [userId, token]);
-
+  
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -163,7 +176,7 @@ function Profile() {
     }
 
     try {
-      const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/update-profile/${userId}`, {
+      const response = await fetch(`${API_URL}/update-profile/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
