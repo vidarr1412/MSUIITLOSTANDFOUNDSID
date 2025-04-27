@@ -29,43 +29,51 @@ function Profile() {
       console.error("Invalid token:", error);
     }
   }
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!userId) return;
-      try {
-        const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/profile/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-  
-        // Check if the response is not ok (status is not 200)
-        if (!response.ok) {
-          throw new Error(`Failed to fetch user data: ${response.statusText}`);
-        }
-  
-        // Check if the response is JSON
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          setUser({
-            firstName: data.firstName || "",
-            lastName: data.lastName || "",
-            email: data.email || "",
-            image_Url: data.image_Url || "prof.jpg",
-            contactNumber: data.contactNumber || "",
-            college: data.college || "",
-            year_lvl: data.year_lvl || "",
-          });
-        } else {
-          throw new Error('Expected JSON but got something else');
-        }
-  
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        alert(`Error: ${error.message}`);
+ useEffect(() => {
+  const fetchUserData = async () => {
+    if (!userId) return;
+
+    try {
+      // Make the request to the profile endpoint
+      const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/profile/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Cache-Control': 'no-cache',  // This makes sure to bypass cache
+        },
+      });
+
+      // Check if response is OK
+      if (!response.ok) {
+        throw new Error(`Error fetching user data: ${response.statusText}`);
       }
-    };
-    fetchUserData();
-  }, [userId, token]);
+
+      // Ensure the response is in JSON format
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const data = await response.json();
+
+        // Handle data correctly
+        setUser({
+          firstName: data.firstName || "",
+          lastName: data.lastName || "",
+          email: data.email || "",
+          image_Url: data.image_Url || "prof.jpg",
+          contactNumber: data.contactNumber || "",
+          college: data.college || "",
+          year_lvl: data.year_lvl || "",
+        });
+      } else {
+        throw new Error("Expected JSON but got something else.");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      alert(`Error: ${error.message}`);  // Optionally alert the user
+    }
+  };
+
+  fetchUserData();
+}, [userId, token]);
+
   
   const handleImageChange = (event) => {
     const file = event.target.files[0];
