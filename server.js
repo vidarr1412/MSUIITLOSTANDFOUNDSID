@@ -19,14 +19,18 @@ const path = require('path');
 // Middleware
 app.use(cors());
 app.use(express.json());
-const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'build')));
 
-app.use(express.static(path.join(__dirname, '/dist')));
-
-// For any route, serve index.html from root's 'dist' folder
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+
+// app.use(express.static(path.join(__dirname, '/dist')));
+
+// // For any route, serve index.html from root's 'dist' folder
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+// });
 mongoose
 .connect(MONGO_URI)
 .then(() => {
