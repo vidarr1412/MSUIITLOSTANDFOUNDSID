@@ -33,7 +33,7 @@ function Profile() {
     const fetchUserData = async () => {
       if (!userId) return;
       try {
-        const response = await fetch(`http://localhost:3000/profile/${userId}`, {
+        const response = await fetch(`https://msuiitlostandfoundsid.onrender.com/api/profile/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
   
