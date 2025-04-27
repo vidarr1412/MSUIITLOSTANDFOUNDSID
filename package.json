@@ -76,6 +76,7 @@
     ]
   },
   "devDependencies": {
+    "react-scripts": "^5.0.0",
     "concurrently": "^9.1.2",
     "electron": "^35.1.5",
     "electron-packager": "^17.1.2",
