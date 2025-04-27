@@ -50,7 +50,7 @@
     "server": "node server.js",
     "react-start": "set BROWSER=none && react-scripts start ",
     "electron-start": "wait-on http://localhost:3000 ",
- "start": "npm run build && node server.js"
+ "start": "npm run server && npm run react-start",
     "build": "npm install",
     "test": "react-scripts test",
     "package": "electron-packager . MyApp --platform=win32 --arch=x64 --out=dist --overwrite --ignore=^/dist$",
