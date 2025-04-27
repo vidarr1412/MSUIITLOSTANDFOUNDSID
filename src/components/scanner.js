@@ -129,7 +129,7 @@ function ItemScanner() {
 
   const fetchUserData = async (userId) => {
     try {
-        const response = await axios.get(`${API_URL}/profile/${userId}`);
+        const response = await axios.get(`${API_URL}/api/profile/${userId}`);
         const data = response.data;
 
         if (!data) {
