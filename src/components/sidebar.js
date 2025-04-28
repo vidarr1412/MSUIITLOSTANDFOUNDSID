@@ -19,11 +19,12 @@ const Sidebar = () => {
     document.body.classList.toggle("sidebar-open", !isOpen);
   };
 
-  const getUserType = () => {
+  const getusertype = () => {
     const token = localStorage.getItem("token"); // Replace with your token storage method
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
+        console.log(decodedToken)
         return decodedToken.usertype; // Assuming 'usertype' is in the token
       } catch (err) {
         console.error("Invalid token:", err);
@@ -33,7 +34,7 @@ const Sidebar = () => {
     return null;
   };
   const navigate = useNavigate();
-  const usertype = getUserType();
+  const usertype = getusertype();
   const handleLogout = () => {
     console.log("Logging out...");
     localStorage.removeItem("token"); // Clear only the token
@@ -68,7 +69,7 @@ const Sidebar = () => {
 
         <img src="log.png" alt="FIRI" className="logo" />
         <nav className="nav-menu">
-        {userType === null || userType === "" ? (
+        {usertype === null || usertype === "" ? (
             <>
               <NavLink to="/" >
                 <FaHome className="nav-icon" /> Home
