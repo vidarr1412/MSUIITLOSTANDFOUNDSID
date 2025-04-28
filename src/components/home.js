@@ -203,7 +203,7 @@ useEffect(() => {
           <h1>Misplaced Something?, <br />  Found a Lost Item?</h1>
           <p>
 At MSU IIT, we understand how frustrating it can be to lose something valuable. Our Lost and Found system makes it easier than ever to report or recover lost items. Whether you’ve misplaced your belongings or found something that belongs to someone else, simply upload the details, and we’ll take care of the rest. Let us help you reconnect with what’s yours! </p>
-          <NavLink to="/userComplaints">
+          <NavLink to="/Complaints">
             <button className="get-qr-button">File Report Now</button>
           </NavLink>
           <div className='divider'></div>
