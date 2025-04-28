@@ -5,11 +5,11 @@ import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope, faUserGear } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from "react-router-dom";
 
 import { FaBox, FaCheck, FaFileAlt, FaUser } from "react-icons/fa";
 import { FaFacebook, FaEnvelope, FaGithub } from "react-icons/fa";
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from "react-router-dom";
 
 import Header from "./header";
 import '../style/home.css'; 
@@ -54,7 +54,7 @@ function Home() {
   
         const newData = {
           listedFoundItems: foundItems.length,
-          totalClaims: foundItems.filter((item) => item.STATUS === "claimed").length,
+ 
           totalLostReports: lostReports.length,
           totalRetrievalRequests: retrievalRequests.length,
         };
@@ -189,7 +189,7 @@ useEffect(() => {
 }, []);
 
 
- const getUserType = () => {
+  const getUserType = () => {
     const token = localStorage.getItem("token"); // Replace with your token storage method
     if (token) {
       try {
@@ -244,7 +244,6 @@ useEffect(() => {
              </>
           )}
           <div className='divider'></div>
-        </div>assName='divider'></div>
         </div>
 
         {/* Statistics Section */}
