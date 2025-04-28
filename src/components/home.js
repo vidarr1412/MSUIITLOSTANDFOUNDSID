@@ -8,6 +8,8 @@ import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 
 import { FaBox, FaCheck, FaFileAlt, FaUser } from "react-icons/fa";
 import { FaFacebook, FaEnvelope, FaGithub } from "react-icons/fa";
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from "react-router-dom";
 
 import Header from "./header";
 import '../style/home.css'; 
@@ -187,6 +189,22 @@ useEffect(() => {
 }, []);
 
 
+ const getUserType = () => {
+    const token = localStorage.getItem("token"); // Replace with your token storage method
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        return decodedToken.usertype; // Assuming 'usertype' is in the token
+      } catch (err) {
+        console.error("Invalid token:", err);
+        return null;
+      }
+    }
+    return null;
+  };
+  const navigate = useNavigate();
+  const usertype = getUserType();
+
   return (
     <>{loading && (
       <div className="loading-overlay">
@@ -200,13 +218,33 @@ useEffect(() => {
       <div className="main-content">
         {/* Content Section */}
         <div className="cont section">
-          <h1>Misplaced Something?, <br />  Found a Lost Item?</h1>
+          <h1>Lost Something? <br /></h1><h2>Don't worry, we've got you covered!</h2>
           <p>
-At MSU IIT, we understand how frustrating it can be to lose something valuable. Our Lost and Found system makes it easier than ever to report or recover lost items. Whether you’ve misplaced your belongings or found something that belongs to someone else, simply upload the details, and we’ll take care of the rest. Let us help you reconnect with what’s yours! </p>
-          <NavLink to="/Complaints">
-            <button className="get-qr-button">File Report Now</button>
+          MSU IIT Security and Investigation Division's Lost and Found system makes it easier than ever to report and recover lost items. 
+  If you’ve misplaced or lost something, simply upload the details — we’ll handle the rest. 
+  Let us help you reconnect with what’s yours! </p>
+  {usertype === null || usertype === "" ? (
+    <>
+          <NavLink to="/userComplaints">
+            <button className="get-qr-button">File Complaint Now</button>
           </NavLink>
+           </>
+          ) : usertype !== "admin"&&(
+            <>
+          <NavLink to="/userComplaints">
+            <button className="get-qr-button">File Complaint Now</button>
+          </NavLink>
+          </>
+          )}
+          {usertype === "admin" && (
+             <>
+             <NavLink to="/Complaints">
+               <button className="get-qr-button">File Complaint Now</button>
+             </NavLink>
+             </>
+          )}
           <div className='divider'></div>
+        </div>assName='divider'></div>
         </div>
 
         {/* Statistics Section */}
