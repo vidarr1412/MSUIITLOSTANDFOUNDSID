@@ -164,36 +164,15 @@ function Manage() {
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this request?")) {
-      // Optimistically remove the complaint from the state
-      const updatedRequests = requests.filter((req) => req._id !== selectedRequest._id);
-      setRequests(updatedRequests);
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `${API_URL}/complaints/${selectedRequest._id}`,
-          { method: "DELETE" }
-        );
-
-        if (response.ok) {
-          const result = await response.json();
-          setLoading(false);
-          showAlert('Complaint Deleted', 'complaint_error');
-          setShowViewMoreModal(false); // Close modal after successful deletion
-          cacheRef.current = null;
-
-        } else {
-          // Roll back the change in case of failure
-          setRequests([...updatedRequests, selectedRequest]);
-          alert("Failed to delete the complaint. Please try again.");
-        }
-      } catch (error) {
-        // Roll back the change in case of failure
-        setRequests([...updatedRequests, selectedRequest]);
-        console.error("Error deleting complaint:", error);
-        alert("An error occurred while deleting the complaint. Please try again.");
-      }
-    }
+    setLoading(true);
+  
+    await fetch(`${API_URL}/complaints/${selectedRequest._id}`, { method: "DELETE" });
+  
+    setLoading(false);
+    showAlert('Complaint Deleted', 'complaint_error');
+    setShowViewMoreModal(false);
+    cacheRef.current = null;
+  
     fetchRequests();
   };
 
@@ -260,8 +239,7 @@ function Manage() {
         setIsViewMore(false);
         cacheRef.current = null;
 
-      } else {
-        alert("Error updating complaint. Please try again.");
+     
       }
     } catch (error) {
       console.error("Error updating complaint:", error);
