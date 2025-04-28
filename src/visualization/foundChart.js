@@ -98,6 +98,8 @@ const FoundCharts = ({ foundItemsData, timelineInterval, handleIntervalChange, t
 
 
 // Step 1: Calculate lost complaints based on selected year and month
+// Prepare recovery rates for lost items by item type
+const recoveryRateByItemType = {};
 const filteredLostItemsData = complaintsData.filter(complaint => {
   const date = new Date(complaint.date); // Assuming complaint.date exists
   const year = date.getFullYear();
@@ -107,8 +109,7 @@ const filteredLostItemsData = complaintsData.filter(complaint => {
     (selectedLocationMonth ? month === selectedLocationMonth : true);
 });
 
-// Prepare recovery rates for lost items by item type
-const recoveryRateByItemType = {};
+
 
 // Group lost items by item type
 filteredLostItemsData.forEach(complaint => {
@@ -125,7 +126,7 @@ filteredLostItemsData.forEach(complaint => {
 });
 
 // Prepare data for the recovery rate table
-const recoveryRateDataByItemType = Object.keys(recoveryRateByItemType).map(type => {
+const recoveryRateData = Object.keys(recoveryRateByItemType).map(type => {
   const { totalLost, totalFound } = recoveryRateByItemType[type];
   return {
     type,
@@ -140,16 +141,12 @@ const recoveryRateDataByItemType = Object.keys(recoveryRateByItemType).map(type 
 
   // **********************************************************************************
 
-  const [selectedYear, setSelectedYear] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState(null);
+  
   const [filteredData, setFilteredData] = useState([]);
 
   // Extract unique years from data
   const availableYears = [...new Set([...complaintsData, ...foundItemsData].map(item => new Date(item.date || item.DATE_FOUND).getFullYear()))];
 
-  // Handle year & month selection
-  const handleYearChange = (e) => setSelectedYear(Number(e.target.value) || null);
-  const handleMonthChange = (e) => setSelectedMonth(Number(e.target.value) || null);
 
   // Function to process data by time
   const processDataByTime = (complaints, foundItems, year, month) => {
@@ -179,8 +176,8 @@ const recoveryRateDataByItemType = Object.keys(recoveryRateByItemType).map(type 
 
   // Automatically filter data when year or month changes
   useEffect(() => {
-    setFilteredData(processDataByTime(complaintsData, foundItemsData, selectedYear, selectedMonth));
-  }, [selectedYear, selectedMonth, complaintsData, foundItemsData]);
+    setFilteredData(processDataByTime(complaintsData, foundItemsData, selectedLocationYear, selectedLocationMonth));
+  }, [selectedLocationYear, selectedLocationMonth, complaintsData, foundItemsData]);
 
   // Step 1: Add filtering logic for found items based on selected year and month
   const filteredFoundItemsData2 = foundItemsData.filter(item => {
@@ -214,7 +211,7 @@ const recoveryRateDataByItemType = Object.keys(recoveryRateByItemType).map(type 
 
 
   // Prepare data for the recovery rate table
-  const recoveryRateData = Object.keys(recoveryRateByType).map(type => {
+  const recoveryRateData1 = Object.keys(recoveryRateByType).map(type => {
     const { claimed, found } = recoveryRateByType[type];
     return {
       type,
@@ -227,43 +224,43 @@ const recoveryRateDataByItemType = Object.keys(recoveryRateByItemType).map(type 
   // *****************************************************************************************************
 
 
-  const claimingTimes = {};
-  const itemTypeClaimingTimes = {};
+  // const claimingTimes = {};
+  // const itemTypeClaimingTimes = {};
 
-  foundItemsData.forEach((item) => {
-    // Check if both DATE_FOUND and DATE_CLAIMED are present
-    if (item.DATE_FOUND && item.DATE_CLAIMED) {
-      const dateFound = new Date(item.DATE_FOUND);
-      const dateClaimed = new Date(item.DATE_CLAIMED);
+  // foundItemsData.forEach((item) => {
+  //   // Check if both DATE_FOUND and DATE_CLAIMED are present
+  //   if (item.DATE_FOUND && item.DATE_CLAIMED) {
+  //     const dateFound = new Date(item.DATE_FOUND);
+  //     const dateClaimed = new Date(item.DATE_CLAIMED);
 
-      // Ensure that the claimed date is after the found date
-      if (dateClaimed >= dateFound) {
-        const daysToClaim = (dateClaimed - dateFound) / (1000 * 60 * 60 * 24); // Convert ms to days
+  //     // Ensure that the claimed date is after the found date
+  //     if (dateClaimed >= dateFound) {
+  //       const daysToClaim = (dateClaimed - dateFound) / (1000 * 60 * 60 * 24); // Convert ms to days
 
-        // Store claiming time by date
-        const dateKey = item.DATE_FOUND.split("T")[0]; // Keep only YYYY-MM-DD
-        claimingTimes[dateKey] = claimingTimes[dateKey] || [];
-        claimingTimes[dateKey].push(daysToClaim);
+  //       // Store claiming time by date
+  //       const dateKey = item.DATE_FOUND.split("T")[0]; // Keep only YYYY-MM-DD
+  //       claimingTimes[dateKey] = claimingTimes[dateKey] || [];
+  //       claimingTimes[dateKey].push(daysToClaim);
 
-        // Group by item type
-        const itemType = item.ITEM_TYPE;
-        itemTypeClaimingTimes[itemType] = itemTypeClaimingTimes[itemType] || [];
-        itemTypeClaimingTimes[itemType].push(daysToClaim);
-      }
-    } else {
-      // Optionally handle cases where dates are missing
+  //       // Group by item type
+  //       const itemType = item.ITEM_TYPE;
+  //       itemTypeClaimingTimes[itemType] = itemTypeClaimingTimes[itemType] || [];
+  //       itemTypeClaimingTimes[itemType].push(daysToClaim);
+  //     }
+  //   } else {
+  //     // Optionally handle cases where dates are missing
 
-    }
-  });
+  //   }
+  // });
 
-  // Compute average claiming time per item type
-  const avgClaimingTimes = Object.keys(itemTypeClaimingTimes).map((type) => {
-    const total = itemTypeClaimingTimes[type].reduce((a, b) => a + b, 0);
-    return {
-      type,
-      avgDays: (total / itemTypeClaimingTimes[type].length).toFixed(1),
-    };
-  });
+  // // Compute average claiming time per item type
+  // const avgClaimingTimes = Object.keys(itemTypeClaimingTimes).map((type) => {
+  //   const total = itemTypeClaimingTimes[type].reduce((a, b) => a + b, 0);
+  //   return {
+  //     type,
+  //     avgDays: (total / itemTypeClaimingTimes[type].length).toFixed(1),
+  //   };
+  // });
   // ****************************************************************************************
 
   // Step 1: Add filtering logic for found items based on selected year and month
@@ -359,80 +356,82 @@ const recoveryRateDataByItemType = Object.keys(recoveryRateByItemType).map(type 
 
 
   // --------------------------------------------------------------------------------------------------
-  // Prepare timeline data for the chart based on selected interval
-const filteredTimelineData = {};
+  const filteredTimelineData = {};
 Object.keys(timelineData).forEach(date => {
-  const dateObj = new Date(date);
-  let formattedDate;
+    const dateObj = new Date(date);
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
 
-  switch (timelineInterval) {
-    case 'daily':
-      formattedDate = dateObj.toLocaleDateString(); // Format: "MM/DD/YYYY"
-      break;
-    case 'monthly':
-      formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' }); // Format: "Month Year"
-      break;
-    case 'quarterly':
-      const quarter = Math.floor(dateObj.getMonth() / 3) + 1;
-      formattedDate = `Q${quarter} ${dateObj.getFullYear()}`; // Format: "Q1 2023"
-      break;
-    case 'yearly':
-      formattedDate = dateObj.getFullYear(); // Format: "2023"
-      break;
-    default:
-      formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
-  }
+    if ((selectedLocationYear ? year === selectedLocationYear : true) &&
+        (selectedLocationMonth ? month === selectedLocationMonth : true)) {
+        let formattedDate;
 
-  if (!filteredTimelineData[formattedDate]) {
-    filteredTimelineData[formattedDate] = { found: 0, claimed: 0 };
-  }
+        switch (timelineInterval) {
+            case 'daily':
+                formattedDate = dateObj.toLocaleDateString();
+                break;
+            case 'monthly':
+                formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+                break;
+            case 'quarterly':
+                const quarter = Math.floor(dateObj.getMonth() / 3) + 1;
+                formattedDate = `Q${quarter} ${year}`;
+                break;
+            case 'yearly':
+                formattedDate = year;
+                break;
+            default:
+                formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+        }
 
-  filteredTimelineData[formattedDate].found += timelineData[date].found;
-  filteredTimelineData[formattedDate].claimed += timelineData[date].claimed;
+        if (!filteredTimelineData[formattedDate]) {
+            filteredTimelineData[formattedDate] = { found: 0, claimed: 0 };
+        }
+
+        filteredTimelineData[formattedDate].found += timelineData[date].found;
+        filteredTimelineData[formattedDate].claimed += timelineData[date].claimed;
+    }
 });
 
 // Sort the dates in chronological order
 const sortedTimelineKeys = Object.keys(filteredTimelineData).sort((a, b) => {
-  if (timelineInterval === 'quarterly') {
-    // Extract quarter and year for comparison
-    const [quarterA, yearA] = a.split(' ');
-    const [quarterB, yearB] = b.split(' ');
+    if (timelineInterval === 'quarterly') {
+        const [quarterA, yearA] = a.split(' ');
+        const [quarterB, yearB] = b.split(' ');
 
-    const quarterNumA = parseInt(quarterA.replace('Q', ''));
-    const quarterNumB = parseInt(quarterB.replace('Q', ''));
+        const quarterNumA = parseInt(quarterA.replace('Q', ''));
+        const quarterNumB = parseInt(quarterB.replace('Q', ''));
 
-    // Compare years first
-    if (yearA === yearB) {
-      return quarterNumA - quarterNumB; // Sort by quarter if years are the same
+        if (yearA === yearB) {
+            return quarterNumA - quarterNumB;
+        }
+        return yearA - yearB;
+    } else {
+        const dateA = new Date(a);
+        const dateB = new Date(b);
+        return dateA - dateB;
     }
-    return yearA - yearB; // Sort by year
-  } else {
-    // For daily, monthly, and yearly, use Date object for sorting
-    const dateA = new Date(a);
-    const dateB = new Date(b);
-    return dateA - dateB; // Sort in ascending order
-  }
 });
 
 // Prepare timeline chart data
 const timelineChartData = {
-  labels: sortedTimelineKeys,
-  datasets: [
-    {
-      label: 'Items Found',
-      data: sortedTimelineKeys.map(date => filteredTimelineData[date].found),
-      fill: false,
-      backgroundColor: 'rgba(75, 192, 192, 0.6)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-    },
-    {
-      label: 'Items Claimed',
-      data: sortedTimelineKeys.map(date => filteredTimelineData[date].claimed),
-      fill: false,
-      backgroundColor: 'rgba(255, 99, 132, 0.6)',
-      borderColor: 'rgba(255, 99, 132, 1)',
-    },
-  ],
+    labels: sortedTimelineKeys,
+    datasets: [
+        {
+            label: 'Items Found',
+            data: sortedTimelineKeys.map(date => filteredTimelineData[date].found),
+            fill: false,
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+        },
+        {
+            label: 'Items Claimed',
+            data: sortedTimelineKeys.map(date => filteredTimelineData[date].claimed),
+            fill: false,
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+        },
+    ],
 };
   // --------------------------------------------------------------------------------------------------
   // Prepare chart data for Found Items by Item Type
@@ -471,113 +470,160 @@ const timelineChartData = {
 
 
   // Prepare stacked bar chart data
-  // Prepare stacked bar chart data
-const complaintsByTimeIntervalAndCollege = {};
-foundItemsData.forEach(item => {
-  const dateFound = item.DATE_FOUND ? item.DATE_FOUND.split('T')[0] : null;
-  const college = item.ITEM_TYPE; // Assuming you have a COLLEGE field in your data
-  const dateObj = new Date(dateFound);
-  let formattedDate;
+  const complaintsByTimeIntervalAndCollege = {};
+  foundItemsData.forEach(item => {
+    const dateFound = item.DATE_FOUND ? item.DATE_FOUND.split('T')[0] : null;
+    const college = item.ITEM_TYPE;
+    const dateObj = new Date(dateFound);
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
 
-  switch (timeInterval) {
-    case 'daily':
-      formattedDate = dateObj.toLocaleDateString(); // Format: "MM/DD/YYYY"
-      break;
-    case 'monthly':
-      formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' }); // Format: "Month Year"
-      break;
-    case 'quarterly':
-      const quarter = Math.floor(dateObj.getMonth() / 3) + 1;
-      formattedDate = `Q${quarter} ${dateObj.getFullYear()}`; // Format: "Q1 2023"
-      break;
-    case 'yearly':
-      formattedDate = dateObj.getFullYear(); // Format: "2023"
-      break;
-    default:
-      formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
-  }
+    if ((selectedLocationYear ? year === selectedLocationYear : true) &&
+        (selectedLocationMonth ? month === selectedLocationMonth : true)) {
+      let formattedDate;
 
-  if (!complaintsByTimeIntervalAndCollege[formattedDate]) {
-    complaintsByTimeIntervalAndCollege[formattedDate] = {};
-  }
+      switch (timeInterval) {
+        case 'daily':
+          formattedDate = dateObj.toLocaleDateString();
+          break;
+        case 'monthly':
+          formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+          break;
+        case 'quarterly':
+          const quarter = Math.floor(dateObj.getMonth() / 3) + 1;
+          formattedDate = `Q${quarter} ${year}`;
+          break;
+        case 'yearly':
+          formattedDate = year;
+          break;
+        default:
+          formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+      }
 
-  complaintsByTimeIntervalAndCollege[formattedDate][college] = (complaintsByTimeIntervalAndCollege[formattedDate][college] || 0) + 1;
-});
+      if (!complaintsByTimeIntervalAndCollege[formattedDate]) {
+        complaintsByTimeIntervalAndCollege[formattedDate] = {};
+      }
 
-// Sort the labels in chronological order
-const labels = Object.keys(complaintsByTimeIntervalAndCollege).sort((a, b) => {
-  if (timeInterval === 'quarterly') {
-    // Extract quarter and year for comparison
-    const [quarterA, yearA] = a.split(' ');
-    const [quarterB, yearB] = b.split(' ');
-
-    const quarterNumA = parseInt(quarterA.replace('Q', ''));
-    const quarterNumB = parseInt(quarterB.replace('Q', ''));
-
-    // Compare years first
-    if (yearA === yearB) {
-      return quarterNumA - quarterNumB; // Sort by quarter if years are the same
+      complaintsByTimeIntervalAndCollege[formattedDate][college] = (complaintsByTimeIntervalAndCollege[formattedDate][college] || 0) + 1;
     }
-    return yearA - yearB; // Sort by year
-  } else {
-    // For daily and monthly, use Date object for sorting
-    const dateA = new Date(a);
-    const dateB = new Date(b);
-    return dateA - dateB; // Sort in ascending order
-  }
+  });
+
+  const labels = Object.keys( complaintsByTimeIntervalAndCollege).sort((a, b) => {
+    if (timeInterval === 'quarterly') {
+        const [quarterA, yearA] = a.split(' ');
+        const [quarterB, yearB] = b.split(' ');
+
+        const quarterNumA = parseInt(quarterA.replace('Q', ''));
+        const quarterNumB = parseInt(quarterB.replace('Q', ''));
+
+        if (yearA === yearB) {
+            return quarterNumA - quarterNumB;
+        }
+        return yearA - yearB;
+    } else {
+        const dateA = new Date(a);
+        const dateB = new Date(b);
+        return dateA - dateB;
+    }
 });
 
-// Prepare chart data for stacked bar chart
-const colleges = [...new Set(foundItemsData.map(item => item.ITEM_TYPE))]; // Unique colleges
+const colleges = [...new Set(foundItemsData.map(item => item.ITEM_TYPE))];
 
 const datasets = colleges.map(college => {
-  return {
-    label: college,
-    data: labels.map(label => complaintsByTimeIntervalAndCollege[label][college] || 0), // Count for each time interval
-    backgroundColor: getRandomColor(), // You can customize this color
-  };
+    return {
+        label: college,
+        data: labels.map(label => complaintsByTimeIntervalAndCollege[label][college] || 0),
+        backgroundColor: getRandomColor(),
+    };
 });
 
 const stackedBarChartData = {
-  labels: labels,
-  datasets: datasets,
+    labels: labels,
+    datasets: datasets,
 };
 
 // ------------------------------------------------------------------------------------------------------
 
 
-  // Prepare filtered claiming times based on selected interval
+  const claimingTimes = {};
+  const itemTypeClaimingTimes = {};
+  
+  
+  // Filter found items to include only those that are claimed
+  const claimedFoundItemsData = foundItemsData.filter(item => item.STATUS === 'claimed');
+  
+  claimedFoundItemsData.forEach((item) => {
+    // Check if both DATE_FOUND and DATE_CLAIMED are present
+    if (item.DATE_FOUND && item.DATE_CLAIMED) {
+      const dateFound = new Date(item.DATE_FOUND);
+      const dateClaimed = new Date(item.DATE_CLAIMED);
+  
+      // Ensure that the claimed date is after the found date
+      if (dateClaimed >= dateFound) {
+        const daysToClaim = (dateClaimed - dateFound) / (1000 * 60 * 60 * 24); // Convert ms to days
+  
+        // Store claiming time by date
+        const dateKey = item.DATE_FOUND.split("T")[0]; // Keep only YYYY-MM-DD
+        claimingTimes[dateKey] = claimingTimes[dateKey] || [];
+        claimingTimes[dateKey].push(daysToClaim);
+  
+        // Group by item type
+        const itemType = item.ITEM_TYPE;
+        itemTypeClaimingTimes[itemType] = itemTypeClaimingTimes[itemType] || [];
+        itemTypeClaimingTimes[itemType].push(daysToClaim);
+      }
+    }
+  });
+  
+  // Compute average claiming time per item type
+  const avgClaimingTimes = Object.keys(itemTypeClaimingTimes).map((type) => {
+    const total = itemTypeClaimingTimes[type].reduce((a, b) => a + b, 0);
+    return {
+      type,
+      avgDays: (total / itemTypeClaimingTimes[type].length).toFixed(1),
+    };
+  });
+  
+  // Prepare filtered claiming times based on selected interval and filters
   const filteredClaimingTimes = {};
+  
   Object.keys(claimingTimes).forEach(date => {
     const dateObj = new Date(date);
-    let formattedDate;
-
-    switch (claimingTimelineInterval) {
-      case 'daily':
-        formattedDate = dateObj.toLocaleDateString(); // Format: "MM/DD/YYYY"
-        break;
-      case 'monthly':
-        formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' }); // Format: "Month Year"
-        break;
-      case 'quarterly':
-        const quarter = Math.floor(dateObj.getMonth() / 3) + 1;
-        formattedDate = `Q${quarter} ${dateObj.getFullYear()}`; // Format: "Q1 2023"
-        break;
-      case 'yearly':
-        formattedDate = dateObj.getFullYear(); // Format: "2023"
-        break;
-      default:
-        formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
+  
+    if ((selectedLocationYear ? year === selectedLocationYear : true) &&
+        (selectedLocationMonth ? month === selectedLocationMonth : true)) {
+      let formattedDate;
+  
+      switch (claimingTimelineInterval) {
+        case 'daily':
+          formattedDate = dateObj.toLocaleDateString();
+          break;
+        case 'monthly':
+          formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+          break;
+        case 'quarterly':
+          const quarter = Math.floor(dateObj.getMonth() / 3) + 1;
+          formattedDate = `Q${quarter} ${year}`;
+          break;
+        case 'yearly':
+          formattedDate = year;
+          break;
+        default:
+          formattedDate = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+      }
+  
+      if (!filteredClaimingTimes[formattedDate]) {
+        filteredClaimingTimes[formattedDate] = [];
+      }
+  
+      filteredClaimingTimes[formattedDate].push(...claimingTimes[date]);
     }
-
-    if (!filteredClaimingTimes[formattedDate]) {
-      filteredClaimingTimes[formattedDate] = [];
-    }
-
-    filteredClaimingTimes[formattedDate].push(...claimingTimes[date]);
   });
 
-  // Compute average claiming time per selected interval
+  
+  
   const avgClaimingTimelineData = Object.keys(filteredClaimingTimes).map(date => {
     const total = filteredClaimingTimes[date].reduce((a, b) => a + b, 0);
     return {
@@ -585,18 +631,50 @@ const stackedBarChartData = {
       avgDays: (total / filteredClaimingTimes[date].length).toFixed(1),
     };
   });
-
-  /// Prepare chart data for average claiming timeline
+  
   const avgClaimingTimelineChartData = {
     labels: avgClaimingTimelineData.map(data => data.date),
     datasets: [{
       label: 'Average Claiming Time (Days)',
       data: avgClaimingTimelineData.map(data => data.avgDays),
       fill: false,
-      borderColor: `hsl(${Math.random() * 360}, 100%, 50%)`, // Random color
+      borderColor: `hsl(${Math.random() * 360}, 100%, 50%)`,
       tension: 0.3,
     }],
   };
+
+
+  // Compute filtered average claiming time per item type (for the table)
+const filteredItemTypeClaimingTimes = {};
+
+claimedFoundItemsData.forEach(item => {
+  if (item.DATE_FOUND && item.DATE_CLAIMED) {
+    const dateFound = new Date(item.DATE_FOUND);
+    const dateClaimed = new Date(item.DATE_CLAIMED);
+
+    if (dateClaimed >= dateFound) {
+      const year = dateFound.getFullYear();
+      const month = dateFound.getMonth() + 1;
+
+      if ((selectedLocationYear ? year === selectedLocationYear : true) &&
+          (selectedLocationMonth ? month === selectedLocationMonth : true)) {
+        const daysToClaim = (dateClaimed - dateFound) / (1000 * 60 * 60 * 24);
+        const itemType = item.ITEM_TYPE;
+
+        filteredItemTypeClaimingTimes[itemType] = filteredItemTypeClaimingTimes[itemType] || [];
+        filteredItemTypeClaimingTimes[itemType].push(daysToClaim);
+      }
+    }
+  }
+});
+
+const filteredAvgClaimingTimes = Object.keys(filteredItemTypeClaimingTimes).map((type) => {
+  const total = filteredItemTypeClaimingTimes[type].reduce((a, b) => a + b, 0);
+  return {
+    type,
+    avgDays: (total / filteredItemTypeClaimingTimes[type].length).toFixed(1),
+  };
+});
 
   // --------------------------------------------------------------------------------------------------
   // Chart options
@@ -725,16 +803,16 @@ const stackedBarChartData = {
             <h3>Lost vs. Found Items by General Location</h3>
 
             <div className="time-interval-container">
-              <label htmlFor="locationYear">Year:</label>
-              <select id="locationYear" onChange={handleLocationYearChange}>
+              <h3>Filter by Year:</h3>
+              <select value={selectedLocationYear} onChange={handleLocationYearChange}>
                 <option value="">All Years</option>
                 {availableYears.map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
 
-              <label htmlFor="locationMonth">Month:</label>
-              <select id="locationMonth" onChange={handleLocationMonthChange}>
+              <h3>Filter by Month:</h3>
+              <select value={selectedLocationMonth} onChange={handleLocationMonthChange}>
                 <option value="">All Months</option>
                 {[...Array(12)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
@@ -780,16 +858,16 @@ const stackedBarChartData = {
 
             {/* Year & Month Selection */}
             <div className="time-interval-container">
-              <label htmlFor="finderTypeYear">Year:</label>
-              <select id="finderTypeYear" onChange={handleLocationYearChange}>
+              <h3>Filter by Year:</h3>
+              <select value={selectedLocationYear} onChange={handleLocationYearChange}>
                 <option value="">All Years</option>
                 {availableYears.map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
 
-              <label htmlFor="finderTypeMonth">Month:</label>
-              <select id="finderTypeMonth" onChange={handleLocationMonthChange}>
+              <h3>Filter by Month:</h3>
+              <select value={selectedLocationMonth} onChange={handleLocationMonthChange}>
                 <option value="">All Months</option>
                 {[...Array(12)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
@@ -810,16 +888,16 @@ const stackedBarChartData = {
 
             {/* Year & Month Selection */}
             <div className="time-interval-container">
-              <label htmlFor="timelineInterval">Year:</label>
-              <select id="timelineInterval" onChange={handleYearChange} >
+              <h3>Filter by Year:</h3>
+              <select value={selectedLocationYear} onChange={handleLocationYearChange}>
                 <option value="">All Years</option>
                 {availableYears.map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
 
-              <label htmlFor="timelineInterval" >Month:</label>
-              <select id="timelineInterval" onChange={handleMonthChange}>
+              <h3>Filter by Month:</h3>
+              <select value={selectedLocationMonth} onChange={handleLocationMonthChange}>
                 <option value="">All Months</option>
                 {[...Array(12)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
@@ -838,16 +916,16 @@ const stackedBarChartData = {
 
             {/* Year & Month Selection */}
             <div className="time-interval-container">
-              <label htmlFor="statusYear">Year:</label>
-              <select id="statusYear" onChange={handleLocationYearChange}>
+              <h3>Filter by Year:</h3>
+              <select value={selectedLocationYear} onChange={handleLocationYearChange}>
                 <option value="">All Years</option>
                 {availableYears.map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
 
-              <label htmlFor="statusMonth">Month:</label>
-              <select id="statusMonth" onChange={handleLocationMonthChange}>
+              <h3>Filter by Month:</h3>
+              <select value={selectedLocationMonth} onChange={handleLocationMonthChange}>
                 <option value="">All Months</option>
                 {[...Array(12)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
@@ -863,28 +941,25 @@ const stackedBarChartData = {
           <div className="chart-card">
             <h3>Recovery Rate of Found Items by Item Type</h3>
             <div className="time-interval-container">
-              <label htmlFor="statusYear">Year:</label>
-              <select id="statusYear" onChange={handleLocationYearChange}>
+              <h3>Filter by Year:</h3>
+              <select value={selectedLocationYear} onChange={handleLocationYearChange}>
                 <option value="">All Years</option>
                 {availableYears.map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
 
-              <label htmlFor="statusMonth">Month:</label>
-              <select id="statusMonth" onChange={handleLocationMonthChange}>
+              <h3>Filter by Month:</h3>
+              <select value={selectedLocationMonth} onChange={handleLocationMonthChange}>
                 <option value="">All Months</option>
                 {[...Array(12)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
                 ))}
               </select>
             </div>
-            <div className="table-container1">
-              
-              
 
 
-              
+            <div className="table-container1">              
               <table className="ffound-items-table1">
                 <thead>
                   <tr>
@@ -895,7 +970,7 @@ const stackedBarChartData = {
                   </tr>
                 </thead>
                 <tbody>
-                  {recoveryRateData.map((data, index) => (
+                  {recoveryRateData1.map((data, index) => (
                     <tr key={index}>
                       <td>{data.type}</td>
                       <td>{data.claimed}</td>
@@ -906,10 +981,10 @@ const stackedBarChartData = {
                 </tbody>
               </table>
             </div>
-          </div>
+          
 
 
-          <div className="chart-card">
+          
             <h3>Recovery Rate of Lost Items by Item Type</h3>
             <div className="table-container1">
               <table className="ffound-items-table1">
@@ -922,7 +997,7 @@ const stackedBarChartData = {
                   </tr>
                 </thead>
                 <tbody>
-                  {recoveryRateDataByItemType.map((data, index) => (
+                  {recoveryRateData.map((data, index) => (
                     <tr key={index}>
                       <td>{data.type}</td>
                       <td>{data.totalLost}</td>
@@ -937,6 +1012,24 @@ const stackedBarChartData = {
 
           <div className="chart-card">
             <h3>Stacked Bar Chart: Found Items by Time Interval and Item Type</h3>
+
+            <div className="time-interval-container">
+              <h3>Filter by Year:</h3>
+              <select value={selectedLocationYear} onChange={handleLocationYearChange}>
+                <option value="">All Years</option>
+                {availableYears.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+
+              <h3>Filter by Month:</h3>
+              <select value={selectedLocationMonth} onChange={handleLocationMonthChange}>
+                <option value="">All Months</option>
+                {[...Array(12)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
+                ))}
+              </select>
+            </div>
             <div className="time-interval-container">
               <label htmlFor="timelineInterval">Select Time Interval: </label>
               <select id="timelineInterval" value={timeInterval} onChange={handleIntervalChange}>
@@ -951,6 +1044,23 @@ const stackedBarChartData = {
 
           <div className="chart-card">
             <h3>Timeline: Date Found vs. Date Claimed</h3>
+            <div className="time-interval-container">
+              <h3>Filter by Year:</h3>
+              <select value={selectedLocationYear} onChange={handleLocationYearChange}>
+                <option value="">All Years</option>
+                {availableYears.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+
+              <h3>Filter by Month:</h3>
+              <select value={selectedLocationMonth} onChange={handleLocationMonthChange}>
+                <option value="">All Months</option>
+                {[...Array(12)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
+                ))}
+              </select>
+            </div>
             <div className="time-interval-container">
               <label htmlFor="timelineInterval">Select Time Interval: </label>
               <select id="timelineInterval" value={timelineInterval} onChange={handleIntervalChange}>
@@ -968,6 +1078,23 @@ const stackedBarChartData = {
           <div className="chart-card">
 
             <h3>Found Items Average Claiming Timeline: Date Found vs. Date Claimed</h3>
+            <div className="time-interval-container">
+              <h3>Filter by Year:</h3>
+              <select value={selectedLocationYear} onChange={handleLocationYearChange}>
+                <option value="">All Years</option>
+                {availableYears.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+
+              <h3>Filter by Month:</h3>
+              <select value={selectedLocationMonth} onChange={handleLocationMonthChange}>
+                <option value="">All Months</option>
+                {[...Array(12)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
+                ))}
+              </select>
+            </div>
             <div className="time-interval-container">
               <label htmlFor="claimingTimelineInterval">Select Time Interval: </label>
               <select id="claimingTimelineInterval" value={claimingTimelineInterval} onChange={handleIntervalChange}>
@@ -988,7 +1115,7 @@ const stackedBarChartData = {
                   </tr>
                 </thead>
                 <tbody>
-                  {avgClaimingTimes.map((data, index) => (
+                  {filteredAvgClaimingTimes.map((data, index) => (
                     <tr key={index}>
                       <td>{data.type}</td>
                       <td>{data.avgDays}</td>
