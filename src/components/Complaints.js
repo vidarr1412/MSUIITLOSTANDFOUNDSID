@@ -1114,13 +1114,15 @@ function Manage() {
 
                   <div className="form-group">
                     <label htmlFor="status">Status</label>
-                    <select
+                       <select
                       id="status"
                       name="status"
                       value={itemData.status}
                       onChange={handleInputChange}
+                      required={!selectedRequest}
                     >
                       option
+                          <option value="">Please select</option>
                       <option value="not-found">not-found</option>
                       <option value="found">found</option>
 
