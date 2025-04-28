@@ -200,10 +200,9 @@ useEffect(() => {
       <div className="main-content">
         {/* Content Section */}
         <div className="cont section">
-          <h1>Find It, <br /> Retrieve It!</h1>
+          <h1>Misplaced Something?, <br />  Found a Lost Item?</h1>
           <p>
-            Step into a world where the art of Interior Design is meticulously crafted to bring together timeless elegance and cutting-edge modern innovation. Allowing you to transform your living spaces into the epitome of luxury and sophistication.
-          </p>
+At MSU IIT, we understand how frustrating it can be to lose something valuable. Our Lost and Found system makes it easier than ever to report or recover lost items. Whether you’ve misplaced your belongings or found something that belongs to someone else, simply upload the details, and we’ll take care of the rest. Let us help you reconnect with what’s yours! </p>
           <NavLink to="/userComplaints">
             <button className="get-qr-button">File Report Now</button>
           </NavLink>
