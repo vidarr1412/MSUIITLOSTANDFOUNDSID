@@ -24,7 +24,7 @@ const Sidebar = () => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        return decodedToken.email; // Assuming 'usertype' is in the token
+        return decodedToken.usertype; // Assuming 'usertype' is in the token
       } catch (err) {
         console.error("Invalid token:", err);
         return null;
@@ -33,7 +33,7 @@ const Sidebar = () => {
     return null;
   };
   const navigate = useNavigate();
-  const userType = getUserType();
+  const usertype = getUserType();
   const handleLogout = () => {
     console.log("Logging out...");
     localStorage.removeItem("token"); // Clear only the token
@@ -80,7 +80,7 @@ const Sidebar = () => {
                 <FaUserPlus className="nav-icon" /> Sign Up
               </NavLink>
             </>
-          ) : userType !== "admin@gmail.com" && (
+          ) : usertype !== "admin" && (
             <>
               <NavLink to="/" >
                 <FaHome className="nav-icon" /> Home
@@ -105,7 +105,7 @@ const Sidebar = () => {
 
             </>
           )}
-          {userType === "admin@gmail.com" && (
+          {usertype === "admin" && (
             <>
               <NavLink to="/dashboard" >
                 <FaChartLine className="nav-icon" /> Dashboard
