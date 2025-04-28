@@ -139,12 +139,14 @@ function ManageRequest() {
     return filtered;
   };
 
-  const filteredRequests = getFilteredRequests().filter((request) => {
+const filteredRequests = getFilteredRequests().filter((request) => {
     const lowerCaseFilterText = filterText.toLowerCase();
     return (
       (request.item_name?.toLowerCase().includes(lowerCaseFilterText) || '') ||
       (request.description?.toLowerCase().includes(lowerCaseFilterText) || '') ||
-      (request.specific_location?.toLowerCase().includes(lowerCaseFilterText) || '')
+      (request.specific_location?.toLowerCase().includes(lowerCaseFilterText) || '')||
+      (request.claimer_name?.toLowerCase().includes(lowerCaseFilterText) || '')
+      
     );
   });
 
