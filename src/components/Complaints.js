@@ -86,7 +86,7 @@ function Manage() {
     setItemData({ ...itemData, [name]: value });
   };
 
-  // Function to filter requests based on search text
+  // Function to filter requests based on h text
   const filterRequests = () => {
     if (!filterText) {
       return filteredRequests; // If no filter text, return all filtered requests
@@ -96,7 +96,8 @@ function Manage() {
       const complainerMatch = request.complainer && request.complainer.toLowerCase().includes(filterText.toLowerCase());
       const itemNameMatch = request.itemname && request.itemname.toLowerCase().includes(filterText.toLowerCase());
       const descriptionMatch = request.description && request.description.toLowerCase().includes(filterText.toLowerCase());
-      return complainerMatch || itemNameMatch || descriptionMatch;
+      const specificMatch = request.location && request.location.toLowerCase().includes(filterText.toLowerCase());
+      return complainerMatch || itemNameMatch || descriptionMatch||specificMatch;
     });
   };
 
@@ -450,10 +451,10 @@ const isFormValid = () => {
 
 
 
-            <div className="search-bar3">
+            <div className="h-bar3">
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="h"
                 value={filterText}
                 onChange={(e) => setFilterText(e.target.value)}
                 className="search-input3"
