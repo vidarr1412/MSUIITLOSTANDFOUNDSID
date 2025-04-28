@@ -451,10 +451,11 @@ const isFormValid = () => {
 
 
 
-            <div className="h-bar3">
+          
+            <div className="search-bar3">
               <input
                 type="text"
-                placeholder="h"
+                placeholder="Search"
                 value={filterText}
                 onChange={(e) => setFilterText(e.target.value)}
                 className="search-input3"
