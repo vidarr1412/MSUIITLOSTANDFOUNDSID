@@ -408,6 +408,25 @@ function Manage() {
     setSelectedImage('');
     fetchRequests();
   };
+const isFormValid = () => {
+  // Check if all required fields are filled
+  return (
+    itemData.complainer && 
+    itemData.college && 
+    itemData.year_lvl && 
+    itemData.itemname && 
+    itemData.description && 
+    itemData.type && 
+    itemData.general_location && 
+    itemData.location && 
+    itemData.contact && 
+    itemData.date && 
+    itemData.time && 
+    itemData.date_complained && 
+    itemData.time_complained &&
+    itemData.status
+  );
+};
 
   return (
     <>
@@ -1121,7 +1140,7 @@ function Manage() {
                 </div> */}
 
                   <div className="button-container3">
-                    <button type="submit" className="submit-btn3">Submit</button>
+                    <button type="submit" className="submit-btn3" disabled={!isFormValid()}>Submit</button>
                     <button type="button" className="cancel-btn3" onClick={() => { setIsEditing(false); setIsViewMore(false); setShowModal(false); }}>Cancel</button>
                   </div>
                 </form>
