@@ -82,11 +82,12 @@ function ManageRequest() {
 
     try {
       await axios.put(endpoint, { status: updatedStatus });
-      alert(`Request has been ${updatedStatus.toLowerCase()}. It will be moved to the corresponding tab.`);
+      
       fetchRequests(); // Refresh UI after update
     } catch (error) {
       console.error(`Error updating ${type} status:`, error);
     }
+    setImageModalOpen(false);
   };
 
   // Combine filters
@@ -345,22 +346,22 @@ const filteredRequests = getFilteredRequests().filter((request) => {
 
               </div>
 
-              <div className="button-container5">
+             <div className="button-container5">
                 {/* Conditional rendering of action buttons based on status */}
                 {selectedRequest.status === 'declined' && (
-                  <button onClick={() => handleStatusUpdate('request', selectedRequest._id, 'pending')} className="reAccept-btn5">Re-Pending</button>
+                  <button onClick={() => {handleStatusUpdate('request', selectedRequest._id, 'pending');setSelectedRequest(null); }} className="reAccept-btn5">Re-Pending</button>
                 )}
 
                 {selectedRequest.status === 'pending' && (
                   <div className="button-container-secondary5">
-                    <button onClick={() => handleStatusUpdate('request', selectedRequest._id, 'approved')} className="approved-btn5">Approve</button>
-                    <button onClick={() => handleStatusUpdate('request', selectedRequest._id, 'declined')} className="decline-btn5">Decline</button>
+                    <button onClick={() => {handleStatusUpdate('request', selectedRequest._id, 'approved');setSelectedRequest(null); }} className="approved-btn5">Approve</button>
+                    <button onClick={() => {handleStatusUpdate('request', selectedRequest._id, 'declined');setSelectedRequest(null); }} className="decline-btn5">Decline</button>
                   </div>
                 )}
 
                 {selectedRequest.status === 'approved' && (
                   
-                    <button onClick={() => handleStatusUpdate('request', selectedRequest._id, 'declined')} className="reDecline-btn5">Re-Decline</button>
+                    <button onClick={() => {handleStatusUpdate('request', selectedRequest._id, 'declined');setSelectedRequest(null); }} className="reDecline-btn5">Re-Decline</button>
                   
                 )}
 
