@@ -995,8 +995,127 @@ font-weight: 500;
 
 
 
-@media (max-width: 768px) {
 
+.modal-overlay6 {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.delete67 {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  text-align: center;
+}
+
+.delete67 p {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left:5;
+  margin-bottom: 1.5rem;
+}
+
+.button-container6 {
+  margin-left:40px;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.delete-btn6,
+.close-btn-manager6 {
+  margin-left:5;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.delete-btn6 {
+  background-color: #7f0000; /* Dark red */
+}
+
+.delete-btn6:hover {
+  background-color: #a00000;
+}
+
+.close-btn-manager6 {
+  background-color: #ff0000; /* Bright red */
+}
+
+.close-btn-manager6:hover {
+  background-color: #e60000;
+}
+
+@media (max-width: 768px) {
+  .modal-overlay6 {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+  }
+  
+  .delete67 {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+    width: 270px;
+    text-align: center;
+  }
+  
+  .delete67 p {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+  
+  .button-container6 {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .delete-btn6,
+  .close-btn-manager6 {
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .delete-btn6 {
+    background-color: #7f0000; /* Dark red */
+  }
+  
+  .delete-btn6:hover {
+    background-color: #a00000;
+  }
+  
+  .close-btn-manager6 {
+    background-color: #ff0000; /* Bright red */
+  }
+  
+  .close-btn-manager6:hover {
+    background-color: #e60000;
+  }
+  
   .manage-bulletin6 {
     padding: 50px;
     margin-left: 0px; /* Space to avoid8lap with the sidebar */
