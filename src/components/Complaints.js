@@ -514,13 +514,17 @@ const isFormValid = () => {
                         <td>{item.date_complained}</td>
                         <td>{item.time_complained}</td>
                         <td>
-                          <button
-                            className={`status-btn3 ${item.status && typeof item.status === 'string' && item.status.toLowerCase() === 'not-found' ? 'not-found' : 'found'}`}
-                            onClick={() => handleStatusChange(item)}
-                          >
-                            {item.status || 'not-found'}
-                            <IoMdArrowDropdown className='arrow3' />
-                          </button>
+                    <button
+  className={`status-btn3 ${
+    !item.status || (typeof item.status === 'string' && item.status.toLowerCase() === 'not-found') 
+      ? 'not-found' 
+      : 'found'
+  }`}
+  onClick={() => handleStatusChange(item)}
+>
+  {item.status || 'not-found'}
+  <IoMdArrowDropdown className='arrow3' />
+</button>
                         </td>
 
                         <td>
@@ -546,13 +550,17 @@ const isFormValid = () => {
                     <p><span>Time Complained: </span> {item.time}</p>
                     <p><span>Complainer Contact: </span> {item.contact}</p>
 
-                    <button
-                      className={`status-btn3 ${item.status && typeof item.status === 'string' && item.status.toLowerCase() === 'not-found' ? 'not-found' : 'found'}`}
-                      onClick={() => handleStatusChange(item)}
-                    >
-                      {item.status || 'not-found'}
-                      <IoMdArrowDropdown className='arrow3' />
-                    </button>
+                       <button
+  className={`status-btn3 ${
+    !item.status || (typeof item.status === 'string' && item.status.toLowerCase() === 'not-found') 
+      ? 'not-found' 
+      : 'found'
+  }`}
+  onClick={() => handleStatusChange(item)}
+>
+  {item.status || 'not-found'}
+  <IoMdArrowDropdown className='arrow3' />
+</button>
                     <button className="view-btn3" onClick={() => handleViewMore(item)}>
                       <FaPlus /> View More
                     </button>
