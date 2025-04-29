@@ -498,16 +498,15 @@ function UserRetrievalRequests() {
 
         {/* Delete Modal */}
         {showModal === 'delete' && selectedRequest && (
-          <div className="modal-overlay6">
-            <div className="67">
-              <h2>Confirm Delete</h2>
-              <p>Are you sure you want to delete this request?</p>
-              <div className="button-container6">
-                <button onClick={handleDeleteRequest} className="delete-btn6">Delete</button>
-                <button onClick={closeModal} className="close-btn-manager6">Cancel</button>
-              </div>
-            </div>
+           <div className="modal-overlay6">
+        <div className="delete67">
+          <p>Are you sure you want to delete?</p>
+          <div className="button-container6">
+            <button onClick={handleDeleteRequest} className="delete-btn6">Yes</button>
+            <button onClick={closeModal} className="close-btn-manager6">No</button>
           </div>
+        </div>
+      </div>
         )}
       </div>
     </>
