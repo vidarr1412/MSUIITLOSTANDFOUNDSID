@@ -32,6 +32,8 @@ function UserComplaint() {
   const [selectedImage, setSelectedImage] = useState(''); // State for selected image
   const [imagePreview, setImagePreview] = useState(null);
   const [viewMode, setViewMode] = useState('grid'); // Default to 'table' mode
+    const [showDeleteModal, setShowDeleteModal] = useState(false); // for delete popup
+  
   const [itemData, setItemData] = useState({
     itemname: '',
     type: '',
@@ -196,36 +198,30 @@ function UserComplaint() {
     setShowModal(true); // Open modal for viewing more details
   };
 
+
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this request?")) {
-      // Optimistically remove the complaint from the state
+ 
       const updatedRequests = requests.filter((req) => req._id !== selectedRequest._id);
       setRequests(updatedRequests);
       setLoading(true);
-      try {
+
         const response = await fetch(
           `${API_URL}/usercomplaints/${selectedRequest._id}`,
           { method: "DELETE" }
         );
 
-        if (response.ok) {
+       
           const result = await response.json();
           showAlert('Complaint Deleted', 'complaint_error');
           setShowViewMoreModal(false); // Close modal after successful deletion
           setLoading(false);
-        } else {
+       
           // Roll back the change in case of failure
-          setRequests([...updatedRequests, selectedRequest]);
-          alert("Failed to delete the complaint. Please try again.");
-        }
-      } catch (error) {
-        // Roll back the change in case of failure
-        setRequests([...updatedRequests, selectedRequest]);
-        console.error("Error deleting complaint:", error);
-        alert("An error occurred while deleting the complaint. Please try again.");
-      }
-    }
+       
+ 
   };
+
+
 
 
 
@@ -691,14 +687,11 @@ function UserComplaint() {
 
                       {selectedRequest ? 'Update' : 'Submit'}
                     </button>
-                    {selectedRequest && (
+                   {selectedRequest && (
                       <button
                         type="button"
                         className="delete-btn1"
-                        onClick={() => {
-                          handleDelete(selectedRequest._id);
-                          setShowModal(false); // Close the modal after deletion
-                        }}
+                        onClick={() => setShowDeleteModal(true)}
                       >
                         Delete
                       </button>
@@ -717,6 +710,29 @@ function UserComplaint() {
                   </div>
 
                 </form>
+                {showDeleteModal && (
+                  <div className="fixed1412">
+  <div className="delete1412">
+    <p>Are you sure you want to delete?</p>
+    <div className="button-container1412">
+      <button
+        onClick={() => {handleDelete(selectedRequest._id);setShowModal(false);setShowDeleteModal(false);}} // Close the modal after deletion}}
+        
+        className="delete-btn1412"
+      >
+        Yes
+      </button>
+      <button
+        onClick={() => setShowDeleteModal(false)}
+        className="close-btn-manager1412"
+      >
+        No
+      </button>
+    </div>
+  </div>
+</div>
+
+)}
 
                 <div className="camera-section2">
 
