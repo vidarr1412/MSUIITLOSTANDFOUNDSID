@@ -338,7 +338,7 @@ function UserRetrievalRequests() {
                   <div className="grid-item6" key={request._id}>
                     <h2>{request.item_name}</h2>
                     <img
-                      src={request.owner_image || "default-grid-url4"}
+                      src={request.owner_image || 'sad.jpg'}
                       alt="Product"
                       className="default-grid-url14"
                       onClick={() => handleImageClick(request.owner_image || "default-image-url4")} // Add click handler
