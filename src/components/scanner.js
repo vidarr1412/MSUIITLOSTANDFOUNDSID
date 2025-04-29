@@ -25,6 +25,8 @@ import showAlert from '../utils/alert';
 
 
 function ItemScanner() {
+  const [facingMode, setFacingMode] = useState('environment'); // or 'user'
+
      const [loading, setLoading] = useState(false);
   const [qrData, setQrData] = useState(""); // State to hold the QR code data
   const [userDetails, setUserDetails] = useState({ email: '', firstName: '', lastName: '' }); // State to hold user details
@@ -129,7 +131,7 @@ function ItemScanner() {
 
   const fetchUserData = async (userId) => {
     try {
-        const response = await axios.get(`${API_URL}/api/profile/${userId}`);
+        const response = await axios.get(`${API_URL}/profile/${userId}`);
         const data = response.data;
 
         if (!data) {
@@ -478,38 +480,45 @@ const handlePageChange = (pageNumber) => {
 
 
 
+let currentStream = null;  // Store the current camera stream
 
+// Function to start the camera with the specified facing mode (always environment)
+async function startCamera(facingMode) {
+  const constraints = {
+    video: {
+      facingMode: { exact: facingMode },  // Always use 'environment' (back camera)
+    },
+    audio: false,
+  };
 
+  try {
+    // If there's an existing stream, stop it before starting a new one
+    if (currentStream) {
+      const tracks = currentStream.getTracks();
+      tracks.forEach(track => track.stop());  // Stop all tracks of the current stream
+    }
 
-
-const startCamera = () => {
-  
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then((stream) => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-
-          // Wait for the stream to be ready before calling play
-          videoRef.current.onloadeddata = () => {
-            videoRef.current.play()
-              .catch((err) => {
-                console.error('Error playing the video stream:', err);
-              });
-          };
-        } else {
-          console.error('Video reference is null');
-        }
-      })
-      .catch((err) => {
-        console.error('Error accessing the camera:', err);
-      });
-  } else {
-    console.error('getUserMedia is not supported in this browser.');
+    // Start the camera with the specified facing mode (back camera)
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    const videoElement = document.querySelector('video');
+    
+    if (videoElement) {
+      videoElement.srcObject = stream;
+      currentStream = stream;  // Store the current stream
+      await videoElement.play();
+      console.log('Back camera started.');
+    }
+  } catch (error) {
+    console.error(`Error accessing back camera:`, error);
   }
-};
+}
 
+// Avoid forcing reinitialization of the scanner component unnecessarily
+useEffect(() => {
+  startCamera('environment'); // Always start camera with the back camera on mount
+}, []);  // Empty dependency array ensures camera starts only once when component mounts
 
+// Capture image function, no changes needed here
 const captureImage = () => {
   const canvas = canvasRef.current;
   const video = videoRef.current;
@@ -520,6 +529,7 @@ const captureImage = () => {
     const context = canvas.getContext('2d');
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     const imageData = canvas.toDataURL('image/png'); // Capturing the image in base64 format
+
     // Update the appropriate state based on the active tab
     if (activeTab === 'item') {
       setImage(imageData); // Set the captured image for the item
@@ -529,6 +539,23 @@ const captureImage = () => {
       setItemData({ ...itemData, OWNER_IMAGE: imageData }); // Update itemData with the captured owner image
     }
   }
+};
+
+// UseEffect to handle scanning (ensure back camera stays)
+useEffect(() => {
+  // Ensure back camera is started after scanning and reset
+  if (currentStream) {
+    const videoElement = document.querySelector('video');
+    if (videoElement) {
+      startCamera('environment');  // Reset to back camera after scanning
+    }
+  }
+}, [scanning]);  // Triggers whenever scanning changes
+
+const switchCamera = () => {
+  const newFacingMode = facingMode === 'user' ? 'environment' : 'user'; // Toggle between 'user' and 'environment'
+  setFacingMode(newFacingMode);
+  startCamera(newFacingMode);  // Restart the camera with the new facing mode
 };
 
 const handleViewMore = (request) => {
@@ -606,39 +633,38 @@ emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailContent, EMAILJS_PUBL
       <Header/>
  
       <div className="contentsms">
-      <div className="manage-bulletin0">
+        <div className="manage-bulletin0">
         <div className='tit7'>
               <div className="breadcrumb57">Qr code </div>
               <div className="breadcrumb07">Scanner</div>
-            </div>    
-            {/* <button className="add-item-btn">+ Add Found Item</button>
+            </div>          {/* <div className="top-right-buttons">
+            <button className="add-item-btn">+ Add Found Item</button>
             <button className="register-qr-btn">Register QR Code</button>
           </div> */}
           <div className="camera-sectionsms">
             {/* Use ReactQrScanner to handle QR code scanning */}
-            {/* {scanning && (
-  <ReactQrScanner
-    key={scanning} // Changing key forces reinitialization
-    delay={5000} // Scan delay
-    style={{ width: "100%" ,transform: 'scaleX(-1)'  }} // Adjust scanner view
-    onScan={handleScan} // Handle scan
-    onError={handleError} // Handle error
-   
-  />
-)}
-          </div> */}
-          {scanning && (<ReactQrScanner
+          
+            {scanning && (
+                <ReactQrScanner
+
+
+
+
+
+
+
+
+
                   key={scanning} // Changing key forces reinitialization
                   delay={5000} // Scan delay
-                  style={{ width: "50%" ,transform: 'scaleX(-1)'  }} // Adjust scanner view
+                  // style={{ width: "50%" ,transform: 'scaleX(-1)'  }} // Adjust scanner view
                   onScan={handleScan} // Handle scan
                   onError={handleError} // Handle error
-                  
+                  className="qr-scanner" // Your custom class name
+
                 />
               )}
-
-
-          </div> 
+  </div>
             <div className='ska'> 
                   <MdQrCodeScanner className="scan-icon" /> 
                   <h2> Scan Lost Item Here</h2>
@@ -983,11 +1009,14 @@ emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailContent, EMAILJS_PUBL
                  
                  
                                  <div className="camera-section">
-                                   <video ref={videoRef} width="320" height="240" autoPlay   style={{ transform: 'scaleX(-1)' }} />
+                                   <video ref={videoRef} width="320" height="240" autoPlay    />
                                    <canvas ref={canvasRef} style={{ display: 'none' }} />
                                    <div className="camera-buttons">
+                                   <button type="button" onClick={switchCamera}>Switch Camera</button> 
                                      <button type="button" onClick={captureImage}>Capture Image</button>
+                                     
                                    </div>
+
                                    {/* Show the captured image based on the active tab */}
                                    {activeTab === 'item' && image && (
                                      <img src={image} alt="Captured Item" className="captured-image" />
