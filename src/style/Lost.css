@@ -637,8 +637,116 @@ width: 100%;
   margin-top: 10px; /* Add some space above the image */
 }
 
+.delete1412 {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  text-align: center;
+  margin-left: -400px;
+  position: fixed;
+}
+.delete1412 p {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: left 30px;
+  margin-bottom: 1.5rem;
+}
+
+.button-container1412 {
+  margin-left: -45x;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.delete-btn1412,
+.close-btn-manager1412 {
+  margin-left: 5px;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.delete-btn1412 {
+  background-color: #7f0000; /* Dark red */
+}
+
+.delete-btn1412:hover {
+  background-color: #a00000;
+}
+
+.close-btn-manager1412 {
+  background-color: #ff0000; /* Bright red */
+}
+
+.close-btn-manager1412:hover {
+  background-color: #e60000;
+}
+
 
 @media (max-width: 768px) {
+  /* Fixed Header */
+
+  /* dhea: media ra ang na change */
+  .delete1412 {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+    width: 300px;
+    text-align: center;
+    margin-left: -400px;
+    position: fixed;
+  }
+  
+  .delete1412 p {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: 5px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .button-container1412 {
+    margin-left: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .delete-btn1412,
+  .close-btn-manager1412 {
+    margin-left: 5px;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .delete-btn1412 {
+    background-color: #7f0000; /* Dark red */
+  }
+  
+  .delete-btn1412:hover {
+    background-color: #a00000;
+  }
+  
+  .close-btn-manager1412 {
+    background-color: #ff0000; /* Bright red */
+  }
+  
+  .close-btn-manager1412:hover {
+    background-color: #e60000;
+  }
+  
   /* Fixed Header */
 
   /* dhea: media ra ang na change */
