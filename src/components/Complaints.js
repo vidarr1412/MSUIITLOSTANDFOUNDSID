@@ -794,12 +794,38 @@ const isFormValid = () => {
                       </select>
                     </div>
                     {showDeleteModal && (
-  <div className="fixed69 inset-069 bg-black69 bg-opacity-5069 flex69 justify-center69 items-center69 z-5069">
-    <div className="bg-white69 p-669 rounded-lg69 shadow-lg69 w-8069">
-      <p className="text-center69 font-semibold69 mb-4">Are you sure you want to delete?</p>
-      <div className="button-container69">
+   <div
+ style={{
+   position: "fixed",
+   inset: 0,
+   backgroundColor: "rgba(0, 0, 0, 0.5)",
+   display: "flex",
+   justifyContent: "center",
+   alignItems: "center",
+   zIndex: 50,
+ }}
+>
+ <div
+   style={{
+     backgroundColor: "#ffffff",
+     padding: "1.5rem",
+     borderRadius: "0.5rem",
+     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+     width: "80%",
+   }}
+ >
+   <p
+     style={{
+       textAlign: "center",
+       fontWeight: "600",
+       marginBottom: "1rem",
+     }}
+   >
+     Are you sure you want to delete?
+   </p>
+   <div className="button-container69">
         <button
-          onClick={() =>handleDelete(selectedRequest._id)}
+          onClick={() =>{handleDelete(selectedRequest._id);setShowModal(false);}}
           className="delete-btn69"
         >
           Yes
