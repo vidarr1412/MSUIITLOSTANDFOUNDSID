@@ -805,15 +805,9 @@ const isFormValid = () => {
    zIndex: 50,
  }}
 >
- <div
-   style={{
-     backgroundColor: "#ffffff",
-     padding: "1.5rem",
-     borderRadius: "0.5rem",
-     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-     width: "15%",
-   }}
- >
+   <div
+ className="are-you-sure"
+   >
    <p
      style={{
        textAlign: "center",
