@@ -866,6 +866,38 @@ font-size: 4rem;
 color: #a51d21;
 }
 
+  .submit-btn60,
+  .delete-btn69, .edit-btn1 {
+  padding: 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  margin-left: 45px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 25%; /* Adjusted for button alignment */
+  
+  }
+  .cancel-btn69{
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    margin-left: 60px;
+    border-radius: 6px;
+    height: 25%;
+    cursor: pointer;
+    width: 25%; /* Adjusted for button alignment */
+    
+    }
+    .delete-btn69 {
+      background-color: #8B0000;
+      color: white;
+      }
+      .cancel-btn69 {
+        background-color: #FF0000;
+        color: white;
+        }  
 /* ---------------------------------------------------------------------- */
 .captured-image {
   margin-top: 10px;
