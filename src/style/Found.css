@@ -898,6 +898,14 @@ color: #a51d21;
         background-color: #FF0000;
         color: white;
         }  
+
+.are-you-sure{
+    background-color: rgb(255, 255, 255);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+  width: 15%;
+}
 /* ---------------------------------------------------------------------- */
 .captured-image {
   margin-top: 10px;
@@ -908,7 +916,27 @@ color: #a51d21;
   }
 
   @media (max-width: 768px) {
-
+.are-you-sure{
+    background-color: rgb(255, 255, 255);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+  width: 55%;
+  height:120px;
+}
+    .submit-btn60,
+  .delete-btn69 {
+  padding: 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  margin-left: 45px;
+  border-radius: 6px;
+  cursor: pointer;
+    height:25%;
+  width: 30%; /* Adjusted for button alignment */
+  
+  }
     /* dhea: media ra ang na change */
 
     .manage-bulletin1 {
