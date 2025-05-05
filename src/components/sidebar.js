@@ -24,7 +24,7 @@ const Sidebar = () => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken)
+       
         return decodedToken.usertype; // Assuming 'usertype' is in the token
       } catch (err) {
         console.error("Invalid token:", err);

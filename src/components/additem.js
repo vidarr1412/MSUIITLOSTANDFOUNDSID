@@ -723,7 +723,7 @@ const clearCapturedImage = () => {
             <Filter onApplyFilters={applyFilters} />
 
             {displayedRequests.length === 0 ? (
-              <div className="no-data-found">No data found</div>
+              <div className="no-data-found"></div>
             ) : (viewMode === 'table' ? (
               <div className="table-container1">
                 <table className="ffound-items-table1">
@@ -1427,7 +1427,7 @@ const clearCapturedImage = () => {
 
 
                         <div className="form-group1">
-                          <label htmlFor="finderType">Finder TYPE submit ni<span className="asterisk3"> *</span></label>  {/* ADD DROP DOWN */}
+                          <label htmlFor="finderType">Finder Type<span className="asterisk3"> *</span></label>  {/* ADD DROP DOWN */}
 
                           <select
                             id="finderType"
@@ -1699,7 +1699,7 @@ const clearCapturedImage = () => {
                     <video ref={videoRef} width="320" height="240" autoPlay style={{ transform: 'scaleX(-1)' }} />
                     <canvas ref={canvasRef} style={{ display: 'none' }} />
                     <div className="camera-buttons">
-                      <button type="button" onClick={captureImage}>Capture Imagesubmit</button>
+                      <button type="button" onClick={captureImage}>Capture Image</button>
                     </div>
                     {/* Show the captured image based on the active tab */}
                     {activeTab === 'item' && image && (
